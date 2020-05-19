@@ -1,0 +1,35 @@
+;-------------------------------------TURN CAPSLOCK KEY INTO HYPER KEY (TESTING)-------------------------------------
+
+
+;Turn your CapsLock key into a Hyper Key WITHOUT LOOSING THE CAPSLOCK FUNCTIONALITY!  I think that's pretty sweet!  There are bits of code to emulate a hyper key from the CapsLock key but they didn't allow you to keep the original functionality.  I just added in some KeyWait code so AHK will wait until the key is held down for XX amount of time.  You can change the amount of time to tailor it to your needs.  I have it set to 0.1 seconds and this can make it difficult to engadge the capslock key sometimes.  I don't use capslock too often so it's not a huge problem for me.  I also have found that I sometimes loose my CTRL ALT DEL functionality sometimes, but I think this is due to pairing the Hyper key with the NumpadDelete key.  I have removed that key from my AHK script and I'm currently testing whether the problem crops up again.  If you do loose CTRL ALT DEL functionality you will mostl likely need to restart your computer.  Yes I did try reloading the script, but that didn't work.  If you know a better way around this issue I'm all ears.  I have This code is based off another bit of code I found on the interwebs.  Not sure exactly where.  Enjoy!
+
+Capslock::
+;GetKeyState, CapsState1, CapsLock
+Keywait, Capslock, U T0.1
+If ErrorLevel = 0
+{
+;MsgBox, CapsLock Toggled
+SetCapsLockState % !GetKeyState("CapsLock", "T")
+Return
+}
+If ErrorLevel = 1
+SetCapsLockState, AlwaysOff
+;MsgBox, Capslock OFF?		;-----for testing
+    ;; must use downtemp to emulate hyper key, you cannot use down in this case 
+    ;; according to https://autohotkey.com/docs/commands/Send.htm, downtemp is as same as down except for ctrl/alt/shift/win keys
+    ;; in those cases, downtemp tells subsequent sends that the key is not permanently down, and may be 
+    ;; released whenever a keystroke calls for it.
+    ;; for example, Send {Ctrl Downtemp} followed later by Send {Left} would produce a normal {Left}
+    ;; keystroke, not a Ctrl{Left} keystroke
+Send {LCtrl DownTemp}{Alt DownTemp}{Shift DownTemp}{LWin DownTemp}
+KeyWait, Capslock
+;Msgbox, Key Done Waiting   ;-----for testing
+Send {LCtrl Up}{Alt Up}{Shift Up}{LWin Up}
+;-----------This was part of the original script, but I didn't see a use for it.  I disabled it and didn't have any issues not using these lines.
+;    if (A_PriorKey = "Capslock") {
+;        Send {Esc}
+;    }
+;if (CapsState1 = D)
+;SetCapsLockState, On
+;Else
+Return
