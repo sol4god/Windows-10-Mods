@@ -31,5 +31,6 @@ Send {LCtrl Up}{Alt Up}{Shift Up}{LWin Up}
 ;    }
 ;if (CapsState1 = D)
 ;SetCapsLockState, On
+;test
 ;Else
 Return
